@@ -5,6 +5,7 @@ import connectDB from "./db/db.js"
 import authRouter from "./routes/authRoute.js"
 import profileRouter from "./routes/profileRoute.js"
 import { jwtAuthMiddleware } from "./utils/jwt.js"
+import userRouter from "./routes/userRoute.js"
 
 const app = express()
 app.use(express.json())
@@ -13,6 +14,7 @@ dotenv.config()
 
 app.use("/api/auth", authRouter)
 app.use("/api/profile", jwtAuthMiddleware, profileRouter)
+app.use("/api/user", userRouter)
 
 const PORT = process.env.PORT
 
