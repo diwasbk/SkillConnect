@@ -31,6 +31,7 @@ class ProfileController {
                 { $set: { profile: createdProfile._id } }
             )
 
+            // Send a success response after the profile is successfully created
             res.status(201).send({
                 message: "Profile created successfully!",
                 result: createdProfile,

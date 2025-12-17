@@ -3,6 +3,8 @@ import cookieParser from "cookie-parser"
 import dotenv from "dotenv"
 import connectDB from "./db/db.js"
 import authRouter from "./routes/authRoute.js"
+import profileRouter from "./routes/profileRoute.js"
+import { jwtAuthMiddleware } from "./utils/jwt.js"
 
 const app = express()
 app.use(express.json())
@@ -10,6 +12,7 @@ app.use(cookieParser());
 dotenv.config()
 
 app.use("/api/auth", authRouter)
+app.use("/api/profile", jwtAuthMiddleware, profileRouter)
 
 const PORT = process.env.PORT
 
