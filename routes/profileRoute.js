@@ -7,5 +7,6 @@ const profileController = new ProfileController
 
 profileRouter.post("/create", upload.single("myfile"), profileController.createProfile)
 profileRouter.get("/:id", profileController.getProfileById)
+profileRouter.put("/new-skill", profileController.addNewSkill)
 
 export default profileRouter;

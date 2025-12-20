@@ -74,6 +74,52 @@ class ProfileController {
             })
         }
     }
+
+    // Add New Skill in the Profile
+    addNewSkill = async (req, res) => {
+        try {
+            // Find the profile using the profileId from the authenticated user
+            const profileExist = await profileModel.findOne({ _id: req.user.profileId })
+
+            // If the profile does not exist, return a 404 error response
+            if (!profileExist) {
+                return res.status(404).send({
+                    message: "Profile not found! Please create your profile first and then try again later.",
+                    success: false
+                })
+            }
+
+            // Destructure skill details from the request body
+            const { category, level, charge, description } = req.body
+
+            // Create a new skill object
+            const newSkill = {
+                category,
+                level,
+                charge,
+                description
+            }
+
+            // Add the new skill to the profile's skills array
+            profileExist.skills.push(newSkill)
+
+            // Save the updated profile to the database
+            await profileExist.save()
+
+            // Send a success response including the newly added skill
+            res.status(201).send({
+                message: "New skill added successfully!",
+                result: newSkill,
+                success: true
+            })
+        } catch (err) {
+            console.log(err)
+            res.status(500).send({
+                message: err.message ? `Internal server error: ${err.message}` : "Internal server error.",
+                success: false
+            })
+        }
+    }
 }
 
 export default ProfileController;
