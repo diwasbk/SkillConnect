@@ -5,7 +5,7 @@ class ProfileController {
     // Create a new profile for the logged-in user
     createProfile = async (req, res) => {
         try {
-            const { profileImageUrl, skills } = req.body
+            const skills = JSON.parse(req.body.skills)
 
             // Check if the user already has a profile
             const profileExist = await profileModel.findOne({ userId: req.user.userId })
@@ -21,7 +21,7 @@ class ProfileController {
             // Create a new profile in the database
             const createdProfile = await profileModel.create({
                 userId: req.user.userId,
-                profileImageUrl: profileImageUrl,
+                profileImageUrl: req.file.path.replace(/\\/g, "/"),
                 skills: skills
             })
 
