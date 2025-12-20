@@ -12,6 +12,9 @@ app.use(express.json())
 app.use(cookieParser());
 dotenv.config()
 
+// Serve uploaded files: this makes all files in the uploads folder publicly accessible
+app.use("/uploads", express.static("uploads"))
+
 app.use("/api/auth", authRouter)
 app.use("/api/profile", jwtAuthMiddleware, profileRouter)
 app.use("/api/user", userRouter)
