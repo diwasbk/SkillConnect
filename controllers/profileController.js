@@ -120,6 +120,59 @@ class ProfileController {
             })
         }
     }
+
+    // Delete Skill by Its ID
+    deleteSkill = async (req, res) => {
+        try {
+            // Find the profile using the profileId from the authenticated user
+            const profile = await profileModel.findOne({ _id: req.user.profileId })
+
+            // If the profile does not exist, return a 404 error response
+            if (!profile) {
+                return res.status(404).send({
+                    message: "Profile not found! Please create your profile first and then try again later.",
+                    success: false
+                })
+            }
+
+            // Check if the skill exists in the profile's skills array
+            const skillExist = profile.skills.find((skill) => {
+                return skill._id == req.params.id
+            })
+
+            // If the skill does not exist, return a 404 error
+            if (!skillExist) {
+                return res.status(404).send({
+                    message: "Skill not found!",
+                    success: false
+                })
+            }
+
+            // Find the index of the skill in the skills array
+            const skillIndex = profile.skills.findIndex((skill) => {
+                return skill.id == req.params.id
+            })
+
+            // Remove the skill from the array using splice
+            profile.skills.splice(skillIndex, 1)
+
+            // Save the updated profile to the database
+            await profile.save()
+
+            // Send a success response with the updated skills array
+            res.status(200).send({
+                message: "Skill deleted successfully!",
+                result: profile.skills,
+                success: true
+            })
+        } catch (err) {
+            console.log(err)
+            res.status(500).send({
+                message: err.message ? `Internal server error: ${err.message}` : "Internal server error.",
+                success: false
+            })
+        }
+    }
 }
 
 export default ProfileController;
