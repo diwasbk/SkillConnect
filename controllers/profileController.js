@@ -45,6 +45,35 @@ class ProfileController {
             })
         }
     }
+
+    // Get a profile by its ID
+    getProfileById = async (req, res) => {
+        try {
+            // Find a profile in the database using the ID from request parameters
+            const profileExist = await profileModel.findOne({ _id: req.params.id })
+
+            // If no profile is found, return 404 (Not Found) response
+            if (!profileExist) {
+                return res.status(404).send({
+                    message: "Profile not found.",
+                    success: false
+                })
+            }
+
+            // If profile is found, send success response with profile data
+            res.status(200).send({
+                message: "Profile found.",
+                result: profileExist,
+                success: true
+            })
+        } catch (err) {
+            console.log(err)
+            res.status(500).send({
+                message: err.message ? `Internal server error: ${err.message}` : "Internal server error.",
+                success: false
+            })
+        }
+    }
 }
 
 export default ProfileController;

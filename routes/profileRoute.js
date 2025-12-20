@@ -6,5 +6,6 @@ const profileRouter = express.Router()
 const profileController = new ProfileController
 
 profileRouter.post("/create", upload.single("myfile"), profileController.createProfile)
+profileRouter.get("/:id", profileController.getProfileById)
 
 export default profileRouter;

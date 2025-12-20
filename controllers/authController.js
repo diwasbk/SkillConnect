@@ -79,6 +79,7 @@ class AuthController {
             // Prepare JWT payload
             const payload = {
                 userId: userExist._id,
+                profileId: userExist.profile,
                 email: userExist.email,
                 role: userExist.role
             }
