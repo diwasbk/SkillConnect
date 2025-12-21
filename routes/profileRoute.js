@@ -9,5 +9,6 @@ profileRouter.post("/create", upload.single("myfile"), profileController.createP
 profileRouter.get("/:id", profileController.getProfileById)
 profileRouter.put("/new-skill", profileController.addNewSkill)
 profileRouter.delete("/delete-skill/:id", profileController.deleteSkill)
+profileRouter.patch("/update-profile-image", upload.single("myfile"), profileController.updateProfileImageByProfileId)
 
 export default profileRouter;
