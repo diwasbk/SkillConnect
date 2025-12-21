@@ -50,7 +50,7 @@ class ProfileController {
     getProfileById = async (req, res) => {
         try {
             // Find a profile in the database using the ID from request parameters
-            const profileExist = await profileModel.findOne({ _id: req.params.id })
+            const profileExist = await profileModel.findOne({ _id: req.params.profileId })
 
             // If no profile is found, return 404 (Not Found) response
             if (!profileExist) {
@@ -66,6 +66,7 @@ class ProfileController {
                 result: profileExist,
                 success: true
             })
+
         } catch (err) {
             console.log(err)
             res.status(500).send({
@@ -112,6 +113,7 @@ class ProfileController {
                 result: newSkill,
                 success: true
             })
+
         } catch (err) {
             console.log(err)
             res.status(500).send({
@@ -137,7 +139,7 @@ class ProfileController {
 
             // Check if the skill exists in the profile's skills array
             const skillExist = profile.skills.find((skill) => {
-                return skill._id == req.params.id
+                return skill._id == req.params.skillId
             })
 
             // If the skill does not exist, return a 404 error
@@ -150,7 +152,7 @@ class ProfileController {
 
             // Find the index of the skill in the skills array
             const skillIndex = profile.skills.findIndex((skill) => {
-                return skill.id == req.params.id
+                return skill.id == req.params.skillId
             })
 
             // Remove the skill from the array using splice
@@ -165,6 +167,7 @@ class ProfileController {
                 result: profile.skills,
                 success: true
             })
+
         } catch (err) {
             console.log(err)
             res.status(500).send({
@@ -201,6 +204,7 @@ class ProfileController {
                 result: result,
                 success: true
             })
+
         } catch (err) {
             console.log(err)
             res.status(500).send({

@@ -6,9 +6,9 @@ const profileRouter = express.Router()
 const profileController = new ProfileController
 
 profileRouter.post("/create", upload.single("myfile"), profileController.createProfile)
-profileRouter.get("/:id", profileController.getProfileById)
+profileRouter.get("/:profileId", profileController.getProfileById)
 profileRouter.put("/new-skill", profileController.addNewSkill)
-profileRouter.delete("/delete-skill/:id", profileController.deleteSkillById)
+profileRouter.delete("/delete-skill/:skillId", profileController.deleteSkillById)
 profileRouter.patch("/update-profile-image", upload.single("myfile"), profileController.updateProfileImageByProfileId)
 
 export default profileRouter;
