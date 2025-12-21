@@ -66,6 +66,7 @@ class ProfileController {
                 result: profileExist,
                 success: true
             })
+            
         } catch (err) {
             console.log(err)
             res.status(500).send({
@@ -112,6 +113,7 @@ class ProfileController {
                 result: newSkill,
                 success: true
             })
+
         } catch (err) {
             console.log(err)
             res.status(500).send({
@@ -165,6 +167,7 @@ class ProfileController {
                 result: profile.skills,
                 success: true
             })
+
         } catch (err) {
             console.log(err)
             res.status(500).send({
@@ -201,6 +204,7 @@ class ProfileController {
                 result: result,
                 success: true
             })
+
         } catch (err) {
             console.log(err)
             res.status(500).send({
