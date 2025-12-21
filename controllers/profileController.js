@@ -122,7 +122,7 @@ class ProfileController {
     }
 
     // Delete Skill by Its ID
-    deleteSkill = async (req, res) => {
+    deleteSkillById = async (req, res) => {
         try {
             // Find the profile using the profileId from the authenticated user
             const profile = await profileModel.findOne({ _id: req.user.profileId })
