@@ -17,7 +17,7 @@ app.use("/uploads", express.static("uploads"))
 
 app.use("/api/auth", authRouter)
 app.use("/api/profile", jwtAuthMiddleware, profileRouter)
-app.use("/api/user", userRouter)
+app.use("/api/user", jwtAuthMiddleware, userRouter)
 
 const PORT = process.env.PORT
 

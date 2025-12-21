@@ -122,7 +122,7 @@ class ProfileController {
     }
 
     // Delete Skill by Its ID
-    deleteSkill = async (req, res) => {
+    deleteSkillById = async (req, res) => {
         try {
             // Find the profile using the profileId from the authenticated user
             const profile = await profileModel.findOne({ _id: req.user.profileId })
@@ -170,6 +170,41 @@ class ProfileController {
             res.status(500).send({
                 message: err.message ? `Internal server error: ${err.message}` : "Internal server error.",
                 success: false
+            })
+        }
+    }
+
+    // Update Profile Image by Profile ID
+    updateProfileImageByProfileId = async (req, res) => {
+        try {
+            // Find the profile using the profileId from the authenticated user
+            const profileExist = await profileModel.findOne({ _id: req.user.profileId })
+
+            // If the profile does not exist, return a 404 error response
+            if (!profileExist) {
+                return res.status(404).send({
+                    message: "Profile not found!",
+                    success: false
+                })
+            }
+
+            // Update the profile image URL
+            const result = await profileModel.findOneAndUpdate(
+                { _id: req.user.profileId },
+                { $set: { profileImageUrl: req.file.path.replace(/\\/g, "/") } },
+                { new: true }
+            )
+
+            // Send a success response with the updated profile image url
+            res.status(200).send({
+                message: "Profile image updated successfully!",
+                result: result,
+                success: true
+            })
+        } catch (err) {
+            console.log(err)
+            res.status(500).send({
+                message: err.message ? `Internal server error: ${err.message}` : "Internal server error."
             })
         }
     }
