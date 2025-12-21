@@ -99,6 +99,55 @@ class UserController {
             });
         }
     }
+
+    // Delete User Account and its associated profile permanently, only allowed for an admin.
+    deleteUserAccountPermanentlyByAdmin = async (req, res) => {
+        try {
+            // Find the user's account using userId from params
+            const userAccountExist = await userModel.findOne({ _id: req.params.userId })
+
+            // If user account does not exist, return 404
+            if (!userAccountExist) {
+                return res.status(404).send({
+                    message: "User not found!",
+                    success: false
+                })
+            }
+
+            // Find the admin who is making the request
+            const admin = await userModel.findOne({ _id: req.user.userId })
+
+            // Compare the entered password with the admin's hashed password in database
+            const isPasswordMatch = await bcrypt.compare(req.body.password, admin.password);
+
+            // If password does not match, return unauthorized response
+            if (!isPasswordMatch) {
+                return res.status(401).send({
+                    message: "Incorrect password!",
+                    success: false
+                });
+            }
+
+            // Delete user
+            await userModel.findOneAndDelete({ _id: req.params.userId });
+
+            // Delete the related profile from profiles collection
+            await profileModel.findOneAndDelete({ userId: req.params.userId })
+
+            // Send success response after deleting both user and profile
+            return res.status(200).send({
+                message: "User account deleted successfully",
+                success: true
+            });
+
+        } catch (err) {
+            console.log(err)
+            res.status(500).send({
+                message: err.message ? `Internal server error: ${err.message}` : "Internal server error.",
+                success: false
+            })
+        }
+    }
 }
 
 export default UserController;
