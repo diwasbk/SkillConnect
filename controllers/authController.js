@@ -109,6 +109,73 @@ class AuthController {
             })
         }
     }
+
+    // Change Account Password
+    changeAccountPassword = async (req, res) => {
+        try {
+            // Find the logged-in user's account using userId from token
+            const userAccountExist = await userModel.findOne({ _id: req.user.userId })
+
+            // If user account does not exist, return 404
+            if (!userAccountExist) {
+                return res.status(404).send({
+                    message: "User not found!",
+                    success: false
+                })
+            }
+
+            // Destructure passwords from request body
+            const { currentPassword, newPassword, confirmNewPassword } = req.body
+
+            // Compare entered current password with stored hashed password
+            const isPasswordMatch = await bcrypt.compare(
+                currentPassword,
+                userAccountExist.password
+            )
+
+            // If current password is incorrect, return error
+            if (!isPasswordMatch) {
+                return res.status(400).send({
+                    message: "Incorrect current password!",
+                    success: false
+                })
+            }
+
+            // Check if new password and confirm password match
+            if (newPassword !== confirmNewPassword) {
+                return res.status(400).send({
+                    message: "New password and confirm new password do not match.",
+                    success: false
+                })
+            }
+
+            // Generate salt for hashing new password
+            const salt = await bcrypt.genSalt(10)
+
+            // Hash the new password
+            const hashedPassword = await bcrypt.hash(newPassword, salt)
+
+            // Update user's password in database
+            await userModel.findOneAndUpdate(
+                { _id: req.user.userId },
+                { $set: { password: hashedPassword } }
+            )
+
+            // Send success response
+            res.status(200).send({
+                message: "Password changed successfully!",
+                success: true
+            })
+
+        } catch (err) {
+            // Log error and return server error response
+            console.log(err)
+            res.status(500).send({
+                message: `Internal server error: ${err.message}`,
+                success: false
+            })
+        }
+    }
 }
 
 export default AuthController;
