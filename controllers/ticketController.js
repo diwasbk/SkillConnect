@@ -6,7 +6,7 @@ class TicektController {
     requestTicket = async (req, res) => {
         try {
             // Destructure required fields from request body
-            const { ticketRequestedTo, severity, description, attachedImageUrl } = req.body
+            const { ticketRequestedTo, severity, description } = req.body
 
             // Check whether the user who will receive the ticket exists or not
             const ticketReceivingUserExist = await userModel.findOne({ _id: ticketRequestedTo })
@@ -25,7 +25,7 @@ class TicektController {
                 ticketRequestedTo: ticketRequestedTo,
                 severity: severity,
                 description: description,
-                attachedImageUrl: attachedImageUrl
+                attachedImageUrl: req.file.path.replace(/\\/g, "/")
             })
 
             // Send success response after ticket creation

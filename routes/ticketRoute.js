@@ -1,9 +1,10 @@
 import express from "express"
 import TicektController from "../controllers/ticketController.js"
+import upload from "../middlewares/multerMiddleware.js"
 
 const ticketRouter = express.Router()
 const ticketController = new TicektController
 
-ticketRouter.post("/request", ticketController.requestTicket)
+ticketRouter.post("/request", upload.single("myfile"), ticketController.requestTicket)
 
 export default ticketRouter;
