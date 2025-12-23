@@ -1,12 +1,12 @@
 import mongoose from "mongoose";
 
 const ticketSchema = new mongoose.Schema({
-    ticketSentFrom: {
+    ticketRequestedFrom: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
         required: true
     },
-    ticketSentTo: {
+    ticketRequestedTo: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
         required: true

@@ -6,6 +6,7 @@ import profileRouter from "./routes/profileRoute.js"
 import { jwtAuthMiddleware } from "./utils/jwt.js"
 import userRouter from "./routes/userRoute.js"
 import { PORT } from "./config/index.js";
+import ticketRouter from "./routes/ticketRoute.js"
 
 const app = express()
 app.use(express.json())
@@ -17,6 +18,7 @@ app.use("/uploads", express.static("uploads"))
 app.use("/api/auth", authRouter)
 app.use("/api/profile", jwtAuthMiddleware, profileRouter)
 app.use("/api/user", jwtAuthMiddleware, userRouter)
+app.use("/api/ticket", jwtAuthMiddleware, ticketRouter)
 
 const startServer = async () => {
     try {
