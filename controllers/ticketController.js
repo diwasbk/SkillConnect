@@ -63,6 +63,33 @@ class TicektController {
             })
         }
     }
+
+    // Get Ticket by Ticket Id
+    getTicketByTicketId = async (req, res) => {
+        try {
+            const ticketExist = await ticketModel.findOne({ _id: req.params.ticketId })
+
+            if (!ticketExist) {
+                return res.status(404).send({
+                    message: "Ticket not found!",
+                    success: false
+                })
+            }
+
+            res.status(200).send({
+                message: "Ticket found!",
+                result: ticketExist,
+                success: true
+            })
+
+        } catch (err) {
+            console.log(err)
+            res.status(500).send({
+                message: err.message ? `Internal server error: ${err.message}` : "Internal server error.",
+                success: false
+            })
+        }
+    }
 }
 
 export default TicektController;
