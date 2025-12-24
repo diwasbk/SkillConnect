@@ -43,6 +43,26 @@ class TicektController {
             })
         }
     }
+
+    // Get All Ticket By Status
+    getAllTicketRequestByStatus = async (req, res) => {
+        try {
+            const ticketStatus = await ticketModel.find({ status: req.query.status })
+
+            res.status(200).send({
+                message: `Ticket Status.`,
+                result: ticketStatus,
+                success: true
+            })
+
+        } catch (err) {
+            console.log(err)
+            res.status(500).send({
+                message: err.message ? `Internal server error: ${err.message}` : "Internal server error.",
+                success: false
+            })
+        }
+    }
 }
 
 export default TicektController;

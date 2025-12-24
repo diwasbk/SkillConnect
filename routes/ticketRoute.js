@@ -6,5 +6,6 @@ const ticketRouter = express.Router()
 const ticketController = new TicektController
 
 ticketRouter.post("/request", upload.single("myfile"), ticketController.requestTicket)
+ticketRouter.get("/", ticketController.getAllTicketRequestByStatus)
 
 export default ticketRouter;

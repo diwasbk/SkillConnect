@@ -47,7 +47,7 @@ class ProfileController {
     }
 
     // Get a profile by its ID
-    getProfileById = async (req, res) => {
+    getProfileByProfileId = async (req, res) => {
         try {
             // Find a profile in the database using the ID from request parameters
             const profileExist = await profileModel.findOne({ _id: req.params.profileId })
