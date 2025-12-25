@@ -9,5 +9,6 @@ ticketRouter.post("/request", upload.single("myfile"), ticketController.requestT
 ticketRouter.get("/", ticketController.getAllTicketRequestByStatus)
 ticketRouter.get("/:ticketId", ticketController.getTicketByTicketId)
 ticketRouter.get("/requested/:userId", ticketController.getAllRequestedTicketsByUserId)
+ticketRouter.get("/received/:userId", ticketController.getAllReceivedTicketsByUserId)
 
 export default ticketRouter;
