@@ -162,6 +162,53 @@ class TicektController {
             })
         }
     }
+
+    // Accept Ticket Request By Ticket Id
+    acceptTicketRequestByTicketId = async (req, res) => {
+        try {
+            const ticketExist = await ticketModel.findOne({ _id: req.params.ticketId })
+
+            if (!ticketExist) {
+                return res.status(404).send({
+                    message: "Ticket not found!",
+                    success: false
+                })
+            }
+
+            if (ticketExist.status == "accepted") {
+                return res.status(403).send({
+                    message: "Request has already been accepted!",
+                    success: false
+                })
+            }
+
+            if (ticketExist.status === "rejected") {
+                return res.status(403).send({
+                    message: "This request was already rejected and cannot be accepted again. Please create a new request.",
+                    success: false
+                });
+            }
+
+            const result = await ticketModel.findOneAndUpdate(
+                { _id: req.params.ticketId },
+                { $set: { status: "accepted" } },
+                { new: true }
+            )
+
+            res.status(200).send({
+                message: "Ticket request accepted successfully!",
+                result: result,
+                success: true
+            })
+
+        } catch (err) {
+            console.log(err)
+            res.status(500).send({
+                message: err.message ? `Internal server error: ${err.message}` : "Internal server error.",
+                success: false
+            })
+        }
+    }
 }
 
 export default TicektController;
