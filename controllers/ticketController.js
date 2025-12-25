@@ -90,6 +90,42 @@ class TicektController {
             })
         }
     }
+
+    // Get All Requested Tickets By User Id And Status
+    getAllRequestedTicketsByUserId = async (req, res) => {
+        try {
+            const userExist = await userModel.findOne({ _id: req.params.userId })
+
+            if (!userExist) {
+                return res.status(404).send({
+                    message: "User not found!",
+                    success: false
+                })
+            }
+
+            const requestedTicket = await ticketModel.find({ ticketRequestedFrom: req.params.userId, status: req.query.status })
+
+            if (!requestedTicket) {
+                return res.status(404).send({
+                    message: " Ticket not found!",
+                    success: false
+                })
+            }
+
+            res.status(200).send({
+                message: "All Requested Tickets",
+                result: requestedTicket,
+                success: true
+            })
+
+        } catch (err) {
+            console.log(err)
+            res.status(500).send({
+                message: err.message ? `Internal server error: ${err.message}` : "Internal server error.",
+                success: false
+            })
+        }
+    }
 }
 
 export default TicektController;

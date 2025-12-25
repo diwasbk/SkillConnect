@@ -8,5 +8,6 @@ const ticketController = new TicektController
 ticketRouter.post("/request", upload.single("myfile"), ticketController.requestTicket)
 ticketRouter.get("/", ticketController.getAllTicketRequestByStatus)
 ticketRouter.get("/:ticketId", ticketController.getTicketByTicketId)
+ticketRouter.get("/requested/:userId", ticketController.getAllRequestedTicketsByUserId)
 
 export default ticketRouter;
