@@ -27,6 +27,9 @@ const ticketSchema = new mongoose.Schema({
         type: String,
         enum: ["pending", "accepted", "rejected"],
         default: "pending"
+    },
+    rejectionReason: {
+        type: String
     }
 }, { timestamps: true })
 
