@@ -47,8 +47,10 @@ class TicektController {
     // Get All Ticket By Status
     getAllTicketRequestByStatus = async (req, res) => {
         try {
+            // Find all tickets with the status provided in query
             const ticketStatus = await ticketModel.find({ status: req.query.status })
 
+            // Send response with tickets
             res.status(200).send({
                 message: `Ticket Status.`,
                 result: ticketStatus,
@@ -67,8 +69,10 @@ class TicektController {
     // Get Ticket by Ticket Id
     getTicketByTicketId = async (req, res) => {
         try {
+            // Find ticket by ID from request params
             const ticketExist = await ticketModel.findOne({ _id: req.params.ticketId })
 
+            // If ticket not found, return 404
             if (!ticketExist) {
                 return res.status(404).send({
                     message: "Ticket not found!",
@@ -76,6 +80,7 @@ class TicektController {
                 })
             }
 
+            // Send response with ticket details
             res.status(200).send({
                 message: "Ticket found!",
                 result: ticketExist,
@@ -94,8 +99,10 @@ class TicektController {
     // Get All Requested Tickets By User Id And Status
     getAllRequestedTicketsByUserId = async (req, res) => {
         try {
+            // Check if user exists
             const userExist = await userModel.findOne({ _id: req.params.userId })
 
+            // If user not found, return 404
             if (!userExist) {
                 return res.status(404).send({
                     message: "User not found!",
@@ -103,8 +110,10 @@ class TicektController {
                 })
             }
 
+            // Find all tickets requested from this user filtered by status
             const requestedTicket = await ticketModel.find({ ticketRequestedFrom: req.params.userId, status: req.query.status })
 
+            // If no tickets found, return 404
             if (!requestedTicket) {
                 return res.status(404).send({
                     message: " Ticket not found!",
@@ -112,6 +121,7 @@ class TicektController {
                 })
             }
 
+            // Send response with requested tickets
             res.status(200).send({
                 message: "All Requested Tickets",
                 result: requestedTicket,
@@ -130,8 +140,10 @@ class TicektController {
     // Get All Received Tickets By User Id And Status
     getAllReceivedTicketsByUserId = async (req, res) => {
         try {
+            // Check if user exists
             const userExist = await userModel.findOne({ _id: req.params.userId })
 
+            // If user not found, return 404
             if (!userExist) {
                 return res.status(404).send({
                     message: "User not found!",
@@ -139,8 +151,10 @@ class TicektController {
                 })
             }
 
+            // Find all tickets received by this user filtered by status
             const receivedTickets = await ticketModel.find({ ticketRequestedTo: req.params.userId, status: req.query.status })
 
+            // If no tickets found, return 404
             if (!receivedTickets) {
                 return res.status(404).send({
                     message: "Tickets not found!",
@@ -148,6 +162,7 @@ class TicektController {
                 })
             }
 
+            // Send response with received tickets
             res.status(200).send({
                 message: "All Received Tickets",
                 result: receivedTickets,
@@ -166,8 +181,10 @@ class TicektController {
     // Accept Ticket Request By Ticket Id
     acceptTicketRequestByTicketId = async (req, res) => {
         try {
+            // Find ticket by Id
             const ticketExist = await ticketModel.findOne({ _id: req.params.ticketId })
 
+            // If ticket not found, return 404
             if (!ticketExist) {
                 return res.status(404).send({
                     message: "Ticket not found!",
@@ -175,6 +192,7 @@ class TicektController {
                 })
             }
 
+            // Check if ticket is already accepted
             if (ticketExist.status == "accepted") {
                 return res.status(403).send({
                     message: "Request has already been accepted!",
@@ -182,6 +200,7 @@ class TicektController {
                 })
             }
 
+            // Check if ticket is already rejected
             if (ticketExist.status === "rejected") {
                 return res.status(403).send({
                     message: "This request was already rejected and cannot be accepted again. Please create a new request.",
@@ -189,12 +208,14 @@ class TicektController {
                 });
             }
 
+            // Update ticket status to accepted
             const result = await ticketModel.findOneAndUpdate(
                 { _id: req.params.ticketId },
                 { $set: { status: "accepted" } },
                 { new: true }
             )
 
+            // Send response with updated ticket
             res.status(200).send({
                 message: "Ticket request accepted successfully!",
                 result: result,
@@ -213,8 +234,10 @@ class TicektController {
     // Reject Ticket Request By Ticket Id
     rejectTicketRequestByTicketId = async (req, res) => {
         try {
+            // Find ticket by Id
             const ticketExist = await ticketModel.findOne({ _id: req.params.ticketId })
 
+            // If ticket not found, return 404
             if (!ticketExist) {
                 return res.status(404).send({
                     message: "Ticket not found!",
@@ -222,6 +245,7 @@ class TicektController {
                 })
             }
 
+            // Check if ticket is already rejected
             if (ticketExist.status == "rejected") {
                 return res.status(403).send({
                     message: "Request has already been rejected!",
@@ -229,12 +253,14 @@ class TicektController {
                 })
             }
 
+            // Update ticket status to rejected and add rejection reason
             const result = await ticketModel.findOneAndUpdate(
                 { _id: req.params.ticketId },
                 { $set: { status: "rejected", rejectionReason: req.body.rejectionReason } },
                 { new: true }
             )
 
+            // Send response with updated ticket
             res.status(200).send({
                 message: "Ticket request rejected successfully!",
                 result: result,
@@ -253,15 +279,18 @@ class TicektController {
     // Edit Requested Ticket By Ticket Id
     editRequestedTicketByTicketId = async (req, res) => {
         try {
+            // Find ticket by Id
             const ticketExist = await ticketModel.findOne({ _id: req.params.ticketId })
 
+            // If ticket not found, return 409
             if (!ticketExist) {
-                return res.status(409).send({
+                return res.status(404).send({
                     message: "Ticket not found!",
                     success: false
                 })
             }
 
+            // Prevent editing if ticket is accepted
             if (ticketExist.status == "accepted") {
                 return res.status(409).send({
                     message: "This ticket is already accepted.",
@@ -269,6 +298,7 @@ class TicektController {
                 })
             }
 
+            // Prevent editing if ticket is rejected
             if (ticketExist.status == "rejected") {
                 return res.status(403).send({
                     message: "This ticket is already rejected.",
@@ -276,12 +306,14 @@ class TicektController {
                 })
             }
 
+            // Update ticket details: severity, description, attached image
             const result = await ticketModel.findOneAndUpdate(
                 { _id: req.params.ticketId },
                 { $set: { severity: req.body.severity, description: req.body.description, attachedImageUrl: req.file.path.replace(/\\/g, "/") } },
                 { new: true }
             )
 
+            // Send response with updated ticket
             res.status(200).send({
                 message: "Ticket Updated",
                 result: result,
@@ -300,15 +332,18 @@ class TicektController {
     // Delete Ticket By Ticket Id
     deleteRequestedTicketByTicketId = async (req, res) => {
         try {
+            // Find ticket by Id
             const ticketExist = await ticketModel.findOne({ _id: req.params.ticketId })
 
+            // If ticket not found, return 409
             if (!ticketExist) {
-                return res.status(409).send({
+                return res.status(404).send({
                     message: "Ticket not found!",
                     success: false
                 })
             }
 
+            // Prevent deleting if ticket is accepted
             if (ticketExist.status == "accepted") {
                 return res.status(409).send({
                     message: "This ticket is already accepted.",
@@ -316,6 +351,7 @@ class TicektController {
                 })
             }
 
+            // Prevent deleting if ticket is rejected
             if (ticketExist.status == "rejected") {
                 return res.status(403).send({
                     message: "This ticket is already rejected.",
@@ -323,8 +359,10 @@ class TicektController {
                 })
             }
 
-            const result = await ticketModel.findOneAndDelete({ _id: req.params.ticketId })
+            // Delete the ticket
+            await ticketModel.findOneAndDelete({ _id: req.params.ticketId })
 
+            // Send response after deletion
             res.status(200).send({
                 message: "Ticket deleted successfully!",
                 success: true
