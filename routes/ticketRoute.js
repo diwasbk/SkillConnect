@@ -12,5 +12,6 @@ ticketRouter.get("/requested/:userId", ticketController.getAllRequestedTicketsBy
 ticketRouter.get("/received/:userId", ticketController.getAllReceivedTicketsByUserId)
 ticketRouter.patch("/accept-request/:ticketId", ticketController.acceptTicketRequestByTicketId)
 ticketRouter.patch("/reject-request/:ticketId", ticketController.rejectTicketRequestByTicketId)
+ticketRouter.patch("/edit-requested-ticket/:ticketId", upload.single("myfile"), ticketController.editRequestedTicketByTicketId)
 
 export default ticketRouter;
