@@ -13,5 +13,6 @@ ticketRouter.get("/received/:userId", ticketController.getAllReceivedTicketsByUs
 ticketRouter.patch("/accept-request/:ticketId", ticketController.acceptTicketRequestByTicketId)
 ticketRouter.patch("/reject-request/:ticketId", ticketController.rejectTicketRequestByTicketId)
 ticketRouter.patch("/edit-requested-ticket/:ticketId", upload.single("myfile"), ticketController.editRequestedTicketByTicketId)
+ticketRouter.delete("/delete-requested-ticket/:ticketId", ticketController.deleteRequestedTicketByTicketId)
 
 export default ticketRouter;

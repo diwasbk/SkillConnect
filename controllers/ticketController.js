@@ -296,6 +296,48 @@ class TicektController {
             })
         }
     }
+
+    // Delete Ticket By Ticket Id
+    deleteRequestedTicketByTicketId = async (req, res) => {
+        try {
+            const ticketExist = await ticketModel.findOne({ _id: req.params.ticketId })
+
+            if (!ticketExist) {
+                return res.status(409).send({
+                    message: "Ticket not found!",
+                    success: false
+                })
+            }
+
+            if (ticketExist.status == "accepted") {
+                return res.status(409).send({
+                    message: "This ticket is already accepted.",
+                    success: false
+                })
+            }
+
+            if (ticketExist.status == "rejected") {
+                return res.status(403).send({
+                    message: "This ticket is already rejected.",
+                    success: false
+                })
+            }
+
+            const result = await ticketModel.findOneAndDelete({ _id: req.params.ticketId })
+
+            res.status(200).send({
+                message: "Ticket deleted successfully!",
+                success: true
+            })
+
+        } catch (err) {
+            console.log(err)
+            res.status(500).send({
+                message: err.message ? `Internal server error: ${err.message}` : "Internal sever error.",
+                success: false
+            })
+        }
+    }
 }
 
 export default TicektController;
