@@ -21,4 +21,10 @@ const reviewAndRatingSchema = new mongoose.Schema({
     },
 }, { timestamps: true })
 
+// Prevent duplicate reviews from same user to same user
+reviewAndRatingSchema.index(
+    { fromUser: 1, toUser: 1 },
+    { unique: true }
+);
+
 export default mongoose.model("ReviewAndRating", reviewAndRatingSchema)
