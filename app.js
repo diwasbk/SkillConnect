@@ -7,6 +7,8 @@ import { jwtAuthMiddleware } from "./utils/jwt.js"
 import userRouter from "./routes/userRoute.js"
 import { PORT } from "./config/index.js";
 import ticketRouter from "./routes/ticketRoute.js"
+import reviewRouter from "./routes/reviewRoute.js"
+import reviewRatingRouter from "./routes/reviewAndRatingRoute.js"
 
 const app = express()
 app.use(express.json())
@@ -19,6 +21,8 @@ app.use("/api/auth", authRouter)
 app.use("/api/profile", jwtAuthMiddleware, profileRouter)
 app.use("/api/user", jwtAuthMiddleware, userRouter)
 app.use("/api/ticket", jwtAuthMiddleware, ticketRouter)
+app.use("/api/review", jwtAuthMiddleware, reviewRouter)
+app.use("/api/review-rating", jwtAuthMiddleware, reviewRatingRouter)
 
 const startServer = async () => {
     try {
