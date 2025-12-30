@@ -52,6 +52,28 @@ class ReviewAndRatingController {
             })
         }
     }
+
+    // Get All Reviews And Ratings Given By a Specific User
+    getAllReviewsAndRatingsGiven = async (req, res) => {
+        try {
+            // Fetch all reviews and ratings where the user is the reviewer (fromUser)
+            const allReviewsAndRatingsGiven = await reviewAndRatingModel.find({ fromUser: req.params.fromUserId })
+
+            // Send success response with fetched reviews and ratings
+            res.status(200).send({
+                message: "All ReviewsAndRatings given.",
+                result: allReviewsAndRatingsGiven,
+                success: true
+            })
+
+        } catch (err) {
+            console.log(err)
+            res.status(500).send({
+                message: err.message ? `Internal server error: ${err.message}` : "Internal server error.",
+                success: false
+            })
+        }
+    }
 }
 
 export default ReviewAndRatingController;

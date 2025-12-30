@@ -6,5 +6,6 @@ const reviewAndRatingController = new ReviewAndRatingController
 
 reviewRatingRouter.get("/", reviewAndRatingController.getAllReviewsAndRatings)
 reviewRatingRouter.get("/:reviewRatingId", reviewAndRatingController.getReviewAndRatingById)
+reviewRatingRouter.get("/given/:fromUserId", reviewAndRatingController.getAllReviewsAndRatingsGiven)
 
 export default reviewRatingRouter;
