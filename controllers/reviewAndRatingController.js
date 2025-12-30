@@ -22,6 +22,36 @@ class ReviewAndRatingController {
             })
         }
     }
+
+    // Get Review And Rating By Id
+    getReviewAndRatingById = async (req, res) => {
+        try {
+            // Find review and rating by ID from request parameters
+            const reviewRatingExist = await reviewAndRatingModel.findOne({ _id: req.params.reviewRatingId })
+
+            // If review and rating does not exist, return 404 response
+            if (!reviewRatingExist) {
+                return res.status(404).send({
+                    message: "ReviewAndRating not found!",
+                    success: false
+                })
+            }
+
+            // Send success response with fetched review and rating data
+            res.status(200).send({
+                message: "ReviewAndRating found!",
+                result: reviewRatingExist,
+                success: true
+            })
+
+        } catch (err) {
+            console.log(err)
+            res.status(500).send({
+                message: err.message ? `Internal server error: ${err.message}` : "Internal server error.",
+                success: false
+            })
+        }
+    }
 }
 
 export default ReviewAndRatingController;

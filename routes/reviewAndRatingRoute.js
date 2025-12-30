@@ -5,5 +5,6 @@ const reviewRatingRouter = express.Router()
 const reviewAndRatingController = new ReviewAndRatingController
 
 reviewRatingRouter.get("/", reviewAndRatingController.getAllReviewsAndRatings)
+reviewRatingRouter.get("/:reviewRatingId", reviewAndRatingController.getReviewAndRatingById)
 
 export default reviewRatingRouter;
