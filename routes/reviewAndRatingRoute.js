@@ -8,5 +8,6 @@ reviewRatingRouter.get("/", reviewAndRatingController.getAllReviewsAndRatings)
 reviewRatingRouter.get("/:reviewRatingId", reviewAndRatingController.getReviewAndRatingById)
 reviewRatingRouter.get("/given/:fromUserId", reviewAndRatingController.getAllReviewsAndRatingsGiven)
 reviewRatingRouter.get("/received/:toUserId", reviewAndRatingController.getAllReviewsAndRatingsReceived)
+reviewRatingRouter.delete("/delete/:reviewAndRatingId", reviewAndRatingController.deleteReviewAndRatingById)
 
 export default reviewRatingRouter;

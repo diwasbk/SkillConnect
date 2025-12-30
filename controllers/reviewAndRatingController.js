@@ -96,6 +96,38 @@ class ReviewAndRatingController {
             })
         }
     }
+
+    // Delete Review And Rating By Id
+    deleteReviewAndRatingById = async (req, res) => {
+        try {
+            // Check if the review and rating with the given ID exists in the database
+            const reviewAndRatingExist = await reviewAndRatingModel.findOne({ _id: req.params.reviewAndRatingId })
+
+            // If no review and rating found, return a 404 Not Found response
+            if (!reviewAndRatingExist) {
+                return res.status(404).send({
+                    message: "ReviewAndRating not found!",
+                    success: false
+                })
+            }
+
+            // If review and rating exists, delete it from the database
+            await reviewAndRatingModel.deleteOne({ _id: req.params.reviewAndRatingId })
+
+            // Send success response after successful deletion
+            res.status(200).send({
+                message: "ReviewAndRating deleted successfully!",
+                success: true
+            })
+
+        } catch (err) {
+            console.log(err.message)
+            res.status(500).send({
+                message: err.message ? `Internal server error: ${err.message}` : "Internal server error.",
+                success: false
+            })
+        }
+    }
 }
 
 export default ReviewAndRatingController;
