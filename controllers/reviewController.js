@@ -5,6 +5,14 @@ class ReviewController {
     // Give Review to a User
     giveReviewToUser = async (req, res) => {
         try {
+            // Prevent self review
+            if (req.user.userId === req.params.toUserId) {
+                return res.status(400).send({
+                    message: "You cannot review yourself",
+                    success: false
+                });
+            }
+
             // Check if the user to be reviewed exists
             const userExist = await userModel.findOne({ _id: req.params.toUserId })
 

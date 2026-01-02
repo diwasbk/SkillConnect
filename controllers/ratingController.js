@@ -5,6 +5,14 @@ class RatingController {
     // Give or Update Rating To a User
     giveRatingToUser = async (req, res) => {
         try {
+            // Prevent self rating
+            if (req.user.userId === req.params.toUserId) {
+                return res.status(400).send({
+                    message: "You cannot rate yourself",
+                    success: false
+                });
+            }
+
             const { rating } = req.body;
 
             // Validate rating
